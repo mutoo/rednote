@@ -1,0 +1,70 @@
+---
+import Icon from './Icon.astro';
+import type { Tool } from '../data/tools';
+
+interface Props {
+  tool: Tool;
+  index: number;
+}
+
+const { tool, index } = Astro.props;
+const isVisaTool = tool.id === 'condition-8558';
+const searchable = [tool.title, tool.description, tool.domain, ...tool.tags, ...tool.searchTerms]
+  .join(' ')
+  .toLocaleLowerCase();
+---
+
+<article
+  class="tool-card"
+  data-tool-id={tool.id}
+  data-search={searchable}
+  data-made-by-me={String(tool.madeByMe)}
+>
+  <div class:list={['tool-preview', { 'tool-preview-generic': !isVisaTool }]} aria-hidden="true">
+    <div class="preview-topline">
+      <span class="maker-label"><Icon name={tool.madeByMe ? 'code' : 'sparkle'} size={14} /> {tool.madeByMe ? '自己做的小工具' : '好用推荐'}</span>
+      <span class="free-label"><span></span> {tool.free ? '免费使用' : '在线工具'}</span>
+    </div>
+    {isVisaTool ? <div class="preview-art">
+      <div class="mini-calendar">
+        <div class="calendar-binding"><i></i><i></i></div>
+        <div class="calendar-heading"><span>YOUR NEXT ADVENTURE</span><span>↗</span></div>
+        <div class="calendar-month">从容计划，自在出发。</div>
+        <div class="calendar-grid">
+          {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day) => <span class="weekday">{day}</span>)}
+          {Array.from({ length: 21 }, (_, i) => <span class:list={[{ 'day-selected': i >= 7 && i <= 17, 'day-start': i === 7, 'day-end': i === 17 }]}>{i + 1}</span>)}
+        </div>
+        <div class="calendar-foot"><span class="tiny-dot"></span> 每一天，都心中有数</div>
+      </div>
+      <div class="preview-title">
+        <span class="preview-eyebrow">AUSTRALIAN VISA</span>
+        <div class="number-8558">8558<span>✳</span></div>
+        <span class="preview-subtitle">把停留时间，算明白。</span>
+        <div class="stay-rule"><strong>12<small>个月</small></strong><span class="rule-divider">/</span><strong>18<small>个月</small></strong><span class="rule-note">滚动窗口</span></div>
+      </div>
+    </div> : <div class="generic-preview"><Icon name="bookmark" size={38} /><strong>{tool.title}</strong><span>{tool.domain}</span></div>}
+    <span class="preview-orbit"></span>
+    <svg class="preview-doodle" width="83" height="47" viewBox="0 0 83 47" fill="none"><path d="M3 38C12 18 34 18 42 29c8 12-6 18-10 7C27 21 54 9 77 11m-9-8 10 8-11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="tool-body">
+    <div class="tool-heading">
+      <span class="tool-number">{String(index + 1).padStart(2, '0')}</span>
+      <h3><a class="tool-link" href={tool.url} target="_blank" rel="noopener noreferrer">{tool.title}<span class="sr-only">（在新标签页打开）</span></a></h3>
+      <span class="tool-open-icon"><Icon name="external" size={20} /></span>
+    </div>
+    <p class="tool-description">{tool.description}</p>
+    <div class="tool-bottom">
+      <div class="tool-tags">{tool.tags.map((tag) => <span>{tag}</span>)}</div>
+      <button
+        class="save-button"
+        type="button"
+        data-save={tool.id}
+        data-title={tool.title}
+        aria-label={`收藏${tool.title}`}
+        aria-pressed="false"
+        title="收藏这个工具"
+        hidden
+      ><Icon name="bookmark" size={17} /><span data-save-label>收藏</span></button>
+    </div>
+  </div>
+</article>

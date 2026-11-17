@@ -1,0 +1,40 @@
+---
+const paths = {
+  bookmark: '<path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-4-6 4V4.75Z"/>',
+  search: '<circle cx="10.75" cy="10.75" r="6.75"/><path d="m16 16 4.5 4.5"/>',
+  arrow: '<path d="M5 12h14m-5-5 5 5-5 5"/>',
+  external: '<path d="M6 18 18 6M6 6h12v12"/>',
+  code: '<path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16"/>',
+  close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  heart: '<path d="M20.2 5.8a5.5 5.5 0 0 0-7.8 0l-.4.4-.4-.4a5.5 5.5 0 0 0-7.8 7.8L12 22l8.2-8.4a5.5 5.5 0 0 0 0-7.8Z"/>',
+  sparkle: '<path d="m12 3 2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4L12 3Z"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  leaf: '<path d="M20 4C9 2 2 9 6 16s16 1 14-12Z"/><path d="M4 21 15 10"/>',
+};
+
+interface Props {
+  name: keyof typeof paths;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden="true"
+  focusable="false"
+  set:html={paths[name]}
+/>
