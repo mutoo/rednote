@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import ToolCard from '../components/ToolCard.astro';
+import RednoteProfile from '../components/RednoteProfile.astro';
 import { tools } from '../data/tools';
 
 const madeByMeCount = tools.filter((tool) => tool.madeByMe).length;
@@ -14,7 +15,7 @@ const madeByMeCount = tools.filter((tool) => tool.madeByMe).length;
         <span class="brand-mark"><Icon name="bookmark" size={23} /></span>
         <span class="brand-name">mutoo<span class="brand-dot">.</span><span class="brand-divider"></span><span class="brand-caption">工具收藏夹</span></span>
       </a>
-      <span class="header-note"><span class="rednote-mark">小红书</span><span>里分享，<span class="desktop-word">在</span>这里找到</span><Icon name="arrow" size={15} /></span>
+      <RednoteProfile />
     </header>
 
     <main>

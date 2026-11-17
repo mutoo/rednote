@@ -128,6 +128,7 @@ window.addEventListener('storage', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
+  if (document.querySelector('dialog[open]')) return;
   const target = event.target;
   const isEditing = target instanceof HTMLElement && (target.matches('input, textarea, select') || target.isContentEditable);
   if (event.key === '/' && !isEditing && !event.ctrlKey && !event.metaKey && !event.altKey) {

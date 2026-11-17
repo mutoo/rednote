@@ -1,0 +1,95 @@
+---
+import Icon from './Icon.astro';
+
+const profile = {
+  name: '木頭',
+  number: '4226393323',
+  // 来自本人提供的小红书主页二维码，保留分享链接以便唤起 App。
+  url: 'https://xhslink.com/m/rH38t3OyDj',
+  qr: '/images/rednote-qr.png',
+};
+---
+
+<div class="rednote-profile">
+  <a class="rednote-link" href={profile.url} target="_blank" rel="noopener noreferrer" aria-label={`在小红书关注${profile.name}（在新标签页打开）`}>
+    <span class="rednote-mark">小红书</span>
+    <span class="rednote-caption">关注{profile.name}，发现更多好工具</span>
+    <Icon name="external" size={14} />
+  </a>
+  <a class="qr-trigger" href={profile.qr} target="_blank" rel="noopener noreferrer" aria-label={`查看${profile.name}的小红书二维码`} aria-haspopup="dialog" aria-controls="rednote-qr-dialog" title="小红书二维码" data-profile-qr>
+    <Icon name="qrcode" size={18} />
+  </a>
+
+  <dialog class="profile-dialog" id="rednote-qr-dialog" aria-labelledby="rednote-title" aria-describedby="rednote-description">
+    <form method="dialog"><button class="dialog-close" type="submit" aria-label="关闭二维码" autofocus><Icon name="close" size={20} /></button></form>
+    <span class="dialog-eyebrow">LET'S KEEP IN TOUCH</span>
+    <h2 id="rednote-title">在小红书找到我</h2>
+    <p class="profile-account"><strong>{profile.name}</strong><span>小红书号：{profile.number}</span></p>
+    <img class="profile-qr-image" src={profile.qr} width="850" height="850" alt={`${profile.name}的小红书主页二维码`} loading="lazy" decoding="async" />
+    <p class="profile-description" id="rednote-description">用小红书扫一扫，或直接打开我的主页。</p>
+    <a class="profile-visit" href={profile.url} target="_blank" rel="noopener noreferrer">打开我的小红书<Icon name="external" size={16} /><span class="sr-only">（在新标签页打开）</span></a>
+    <a class="profile-download" href={profile.qr} download="木頭的小红书二维码.png">保存二维码</a>
+  </dialog>
+</div>
+
+<script>
+  const trigger = document.querySelector<HTMLAnchorElement>('[data-profile-qr]');
+  const dialog = document.querySelector<HTMLDialogElement>('#rednote-qr-dialog');
+
+  if (trigger && dialog && typeof dialog.showModal === 'function') {
+    trigger.addEventListener('click', (event) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      dialog.showModal();
+    });
+
+    dialog.addEventListener('click', (event) => {
+      if (event.target !== dialog) return;
+      const bounds = dialog.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
+        dialog.close();
+      }
+    });
+  }
+</script>
+
+<style>
+  .rednote-profile { display: flex; align-items: center; gap: 13px; }
+  .rednote-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; border-radius: 5px; color: var(--muted); font-size: 11px; letter-spacing: .3px; }
+  .rednote-mark { color: #ab4846; font-size: 10px; font-weight: 600; padding: 5px 7px; border: 1px solid #e9c7bd; border-radius: 6px; line-height: 1.2; white-space: nowrap; transition: background 160ms, border-color 160ms; }
+  .rednote-link > :global(svg) { color: var(--muted); transition: transform 160ms; }
+  .rednote-link:hover .rednote-mark { border-color: #d9aaa0; background: #faeee7; }
+  .rednote-link:hover > :global(svg) { transform: translate(2px, -2px); }
+  .qr-trigger { display: grid; place-items: center; width: 36px; height: 44px; border-radius: 8px; color: var(--muted); transition: background 160ms, color 160ms; }
+  .qr-trigger:hover { background: #e8eddc; color: var(--green); }
+  .profile-dialog { position: fixed; width: min(380px, calc(100% - 32px)); max-height: calc(100svh - 32px); margin: auto; padding: 32px 28px 23px; overflow: auto; overscroll-behavior: contain; text-align: center; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 24px 90px #22351d30; }
+  .profile-dialog::backdrop { background: #26302166; backdrop-filter: blur(4px); }
+  .dialog-close { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--muted); border-radius: 50%; }
+  .dialog-close:hover { background: #e8eddc; color: var(--green); }
+  .dialog-eyebrow { display: block; margin-top: 7px; color: var(--muted); font-size: 8px; font-weight: 500; letter-spacing: 2px; }
+  .profile-dialog h2 { margin-top: 13px; color: var(--green); font-size: 22px; font-weight: 600; letter-spacing: .5px; }
+  .profile-account { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 13px; color: var(--muted); }
+  .profile-account strong { font-size: 14px; font-weight: 500; }
+  .profile-account > span { font-size: 11px; letter-spacing: .4px; }
+  .profile-qr-image { display: block; width: min(100%, 272px); height: auto; margin: 19px auto 15px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+  .profile-description { color: var(--muted); font-size: 11px; line-height: 1.9; }
+  .profile-visit { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; margin-top: 19px; padding: 12px 18px; color: var(--paper); background: var(--green); border-radius: 8px; font-size: 12px; transition: background 160ms; }
+  .profile-visit:hover { background: #2f4735; }
+  .profile-download { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 4px; padding: 10px 14px; color: var(--muted); font-size: 11px; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: #bdc7af; }
+  .profile-download:hover { color: var(--green); }
+  :global(body:has(#rednote-qr-dialog[open])) { overflow: hidden; }
+
+  @media (max-width: 800px) {
+    .rednote-profile { gap: 9px; }
+    .rednote-link { gap: 7px; font-size: 10px; }
+  }
+
+  @media (max-width: 600px) {
+    .rednote-profile { gap: 4px; }
+    .rednote-caption, .rednote-link > :global(svg) { display: none; }
+    .rednote-mark { font-size: 10px; padding: 5px 7px; }
+    .qr-trigger { width: 32px; }
+    .profile-dialog { padding-inline: 22px; }
+    .profile-dialog h2 { font-size: 20px; }
+  }
+</style>
